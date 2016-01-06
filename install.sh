@@ -24,7 +24,7 @@ then
    #copy script
    sudo cp OSXey Models.txt /usr/local/bin/
    sudo chmod +x /usr/local/bin/OSXey
-   
+
    #display message
    tput setaf 2
    echo "Installed Sucessfully"
@@ -33,14 +33,14 @@ then
 elif [ $answer == 2 ]
 then
 
-   #remove script  
+   #remove script
    sudo rm -f /usr/local/bin/OSXey /usr/local/bin/Models.txt
 
    #display message
    tput setaf 2
    echo "Uninstalled Sucessfully"
    tput sgr0
-   
+
 else
    echo "Command not supported."
    exit

@@ -14,7 +14,7 @@ fi
 # ==MODEL==
 model=$(system_profiler SPHardwareDataType -detailLevel mini | awk '/Model Identifier/ { print $3 }')
 # use grep to find the model in the list, then delete from ) to end of line
-modelname=`grep $model ~/src/tarebyte/OSXey/Models.txt | sed -e 's/).*/)/g'`
+modelname=`grep $model ~/src/OSXey/Models.txt | sed -e 's/).*/)/g'`
 
 # ==GRAPHICS==
 graphics=$(system_profiler SPDisplaysDataType |
@@ -35,38 +35,20 @@ awk '/Model/{for (i=1; i<=NF-3; i++) $i = $(i+3); NF-=3; print}' | paste -sd "/"
 # ==VERSION==
 versionNumber=$(sw_vers -productVersion) # Finds version number
 
-versionShort=${versionNumber:0:4}  # Cut sting to 1 decimal place for calculation
+versionShort=${versionNumber:0:5}  # Cut sting to 2 decimal places for calculation
 
 case $versionShort in
+  10.11)
+    versionString="El Capitan"
+    ;;
+  10.10)
+    versionString="Yosemite"
+    ;;
   10.9)
     versionString="Mavericks"
     ;;
   10.8)
     versionString="Mountian Lion"
-    ;;
-  10.7)
-    versionString="Lion"
-    ;;
-  10.6)
-    versionString="Snow Leopard"
-    ;;
-  10.5)
-    versionString="Leopard"
-    ;;
-  10.4)
-    versionString="Tiger"
-    ;;
-  10.3)
-    versionString="Panther"
-    ;;
-  10.2)
-    versionString="Jaguar"
-    ;;
-  10.1)
-    versionString="Puma"
-    ;;
-  10.0)
-    versionString="Cheetah"
     ;;
 esac
 
@@ -84,18 +66,9 @@ shell="$SHELL"
 # ==TERMINAL==
 terminal="$TERM"
 
-# ==PACKAGE MANAGER==
-
-# check if brew or macports is installed, then total there packages and set packagehandler
-if [ -e /usr/local/bin/brew  ] || [ -e /opt/boxen/homebrew/bin/brew ]
-then
-  brewpackages=$(brew list -l | tail -n +2 | wc -l)
-  packagehandler=$brewpackages
-elif [ -f /opt/local/bin/port ] #don't think this is the right directory, need to check later.
-then
-  macportpackages="`port installed | wc -l | awk '{print $1 }'`"
-  packagehandler=$macportpackages
-fi
+# ==BREW PACKAGES==
+brewpackages=$(brew list -l | tail -n +2 | wc -l)
+packagehandler=$brewpackages
 
 # ==CPU==
 cpu=$(sysctl -n machdep.cpu.brand_string)
@@ -179,7 +152,7 @@ kernelText="${textColor}Kernel:${normal}"
 uptimeText="${textColor}Uptime:${normal}"
 shellText="${BL}${textColor}Shell:${normal}"
 terminalText="${textColor}Terminal:${normal}"
-packagehandlerText="${textColor}Packages:${normal}"
+packagehandlerText="${textColor}Homebrew packages:${normal}"
 cpuText="${textColor}CPU:${normal}"
 memoryText="${textColor}Memory:${normal}"
 graphicsText="${textColor}Graphics:$normal"
